@@ -7,11 +7,15 @@ class Product
   end
 
   def to_s
-    "Цена: #{@price} руб. (Количество: #{@quantity}"
+    "Цена: #{@price} руб. | (Количество: #{@quantity})"
   end
 
   def update(param)
     @price = param[:price] if param[:price]
     @quantity = param[:quantity] if param[:quantity]
+  end
+
+  def self.from_file(file_path)
+    raise NotImplementedError
   end
 end
