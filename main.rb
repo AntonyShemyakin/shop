@@ -1,16 +1,19 @@
 require_relative 'lib/product'
 require_relative 'lib/movie'
 require_relative 'lib/books'
+require_relative 'lib/discs'
+require_relative 'lib/product_collection'
+require_relative 'lib/purchases'
 
-current_path = File.dirname(__FILE__)
-film = Movie.from_file(current_path + '/data/movies/01.txt')
-book = Books.from_file(current_path + '/data/books/002.txt')
+if Gem.win_platform?
+  Encoding.default_external = Encoding.find(Encoding.locale_charmap)
+  Encoding.default_internal = __ENCODING__
 
-puts film
-puts book
-
-begin
-  Product.from_file(current_path + '/data/movies/01.txt')
-rescue NotImplementedError
-  puts 'Метод класса Product.from_file не реализован'
+  [STDIN, STDOUT].each do |io|
+    io.set_encoding(Encoding.default_external, Encoding.default_internal)
+  end
 end
+
+collection = ProductCollection.from_dir(File.dirname(__FILE__) + '/data')
+puts collection.sort!(by: :title).to_a
+
